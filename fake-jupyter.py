@@ -6,5 +6,11 @@
 
 if __name__ == "__main__":
     import argparse
+    import configparser
 
-    print("Nothing implemented.")
+    config = configparser.ConfigParser()
+
+    config.read("fake-jupyter.ini")
+    provider = config["Configuration"]["provider"]
+
+    print(f"Selected provider: {provider}")
