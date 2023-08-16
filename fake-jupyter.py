@@ -4,11 +4,15 @@
     Main command line tool with emulates the Jupyter runner.
 """
 
-if __name__ == "__main__":
-    import argparse
-    import configparser
-    import sys
+import argparse
+import configparser
+import sys
 
+def _pluto(notebook):
+    return 0
+
+
+if __name__ == "__main__":
     raw_args = sys.argv
     my_name = raw_args[0]
     if not (my_name == "jupyter"):
@@ -29,19 +33,25 @@ if __name__ == "__main__":
     if unknown[0] == my_name:
         del unknown[0]
 
+    notebook = {}
 
-    port = getattr(args, "ServerApp.port")
-    ip = getattr(args, "ServerApp.ip")
-    base_url = getattr(args, "ServerApp.base_url")
-    allow_origin = getattr(args, "ServerApp.allow_origin")
-    allow_root = getattr(args, "ServerApp.allow_root")  
+    notebook["port"] = getattr(args, "ServerApp.port")
+    notebook["ip"] = getattr(args, "ServerApp.ip")
+    notebook["base_url"] = getattr(args, "ServerApp.base_url")
+    notebook["allow_origin"] = getattr(args, "ServerApp.allow_origin")
+    notebook["allow_root"] = getattr(args, "ServerApp.allow_root")  
 
     config = configparser.ConfigParser()
     config.read("fake-jupyter.ini")
     provider = config["Configuration"]["provider"]
 
     print(f"Selected provider: {provider}")
-    print(f"Selected url: {ip}:{port}{base_url}")
-    print(f"Allow origin: {allow_origin} Allow root: {allow_root}")
+    print(f"Selected url: {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
+    print(f"Allow origin: {notebook['allow_origin']} Allow root: {notebook['allow_root']}")
     if len(unknown) > 0:
         print(f"Unknown arguments: {unknown}")
+
+    if (provider == "pluto"):
+        _pluto(notebook)
+    else:
+        print(f"Unknown provider: {provider}")
