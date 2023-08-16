@@ -8,8 +8,18 @@ import argparse
 import configparser
 import sys
 
+def _run(command):
+    import subprocess
+    return subprocess.run(command, capture_output=False, encoding='UTF-8')
+
 def _pluto(notebook):
-    return 0
+    command = ["julia", "-e"]
+    code = "using Pluto;Pluto.run("
+    code += "port=" + str(notebook["port"]) + ","
+
+    code += ")"
+    command.append(code)
+    print(command)
 
 
 if __name__ == "__main__":
