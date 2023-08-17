@@ -15,6 +15,7 @@ def _run(command):
 def _pluto(notebook):
     command = ["julia", "-e"]
     code = "using Pluto;Pluto.run("
+    code += "host=\"" + notebook["ip"] + "\", "
     code += "port=" + str(notebook["port"]) + ","
 
     code += ")"
