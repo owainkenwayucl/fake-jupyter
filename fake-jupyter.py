@@ -18,6 +18,7 @@ def _pluto(notebook, deploy):
     code += "host=\"" + notebook["ip"] + "\", "
     code += "port=" + str(notebook["port"]) + ", "
     code += "base_url=\"" + notebook["base_url"] + "\", "
+    code += "require_secret_for_access = false, "
     code += ")"
     command.append(code)
     print(command)
@@ -41,6 +42,7 @@ if __name__ == "__main__":
     parser.add_argument("--ServerApp.allow_root", metavar="allow", type=bool, default=False)
     parser.add_argument("--ServerApp.port", metavar="port", type=int, default=8888)
     parser.add_argument("--ServerApp.ip", metavar="ip", type=str, default="127.0.0.1")
+    parser.add_argument("--ServerApp.token", metavar="token", type=str, default="")
 
     args, unknown = parser.parse_known_args(raw_args)
 
@@ -53,7 +55,8 @@ if __name__ == "__main__":
     notebook["ip"] = getattr(args, "ServerApp.ip")
     notebook["base_url"] = getattr(args, "ServerApp.base_url")
     notebook["allow_origin"] = getattr(args, "ServerApp.allow_origin")
-    notebook["allow_root"] = getattr(args, "ServerApp.allow_root")  
+    notebook["allow_root"] = getattr(args, "ServerApp.allow_root")
+    notebook["token"] = getattr(args, "ServerApp.token")
 
     config = configparser.ConfigParser()
     try:
@@ -73,6 +76,7 @@ if __name__ == "__main__":
     print(f"Selected provider: {provider}")
     print(f"Selected url: {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
     print(f"Allow origin: {notebook['allow_origin']} Allow root: {notebook['allow_root']}")
+    print(f"Token: {notebook['token']}")
     if len(unknown) > 0:
         print(f"Unknown arguments: {unknown}")
 
