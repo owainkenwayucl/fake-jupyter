@@ -23,6 +23,7 @@ def _pluto(notebook, deploy):
     print(command)
     print(f"Deploying: {deploy}")
     if (deploy):
+        print(f"Fake Jupyter Server Pluto.jl is running on {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
         _run(command)
 
 
