@@ -67,8 +67,8 @@ if __name__ == "__main__":
         deploy = (config["Configuration"]["deploy"].lower() == "true")
     except:
         print(f"Failed to read deploy from \"fake-jupyter.ini\"")
-        print(f"Defaulting to false")
-        deploy = False
+        print(f"Defaulting to true")
+        deploy = True
 
     print(f"Selected provider: {provider}")
     print(f"Selected url: {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
