@@ -12,7 +12,7 @@ def _run(command):
     import subprocess
     return subprocess.run(command, capture_output=False, encoding='UTF-8')
 
-def _pluto(notebook):
+def _pluto(notebook, deploy):
     command = ["julia", "-e"]
     code = "using Pluto;Pluto.run(;"
     code += "host=\"" + notebook["ip"] + "\", "
@@ -21,14 +21,15 @@ def _pluto(notebook):
     code += ")"
     command.append(code)
     print(command)
-    #_run(command)
+    print(f"Deploying: {deploy}")
+    if (deploy):
+        _run(command)
 
 
 if __name__ == "__main__":
     raw_args = sys.argv
     my_name = raw_args[0]
-    if not (my_name == "jupyter"):
-        print(f"Warning: \"{my_name}\" will not override \"jupyter\"")
+
     if len(raw_args) > 1:
         if raw_args[1] == "lab":
             del raw_args[1]
@@ -58,9 +59,15 @@ if __name__ == "__main__":
         config.read("fake-jupyter.ini")
         provider = config["Configuration"]["provider"]
     except:
-        print(f"Failed to read \"fake-jupyter.ini\"")
+        print(f"Failed to read provider from \"fake-jupyter.ini\"")
         print(f"Defaulting to Pluto")
+    try:
         provider = "pluto"
+        deploy = (config["Configuration"]["deploy"].lower() == "true")
+    except:
+        print(f"Failed to read deploy from \"fake-jupyter.ini\"")
+        print(f"Defaulting to false")
+        deploy = False
 
     print(f"Selected provider: {provider}")
     print(f"Selected url: {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
@@ -69,6 +76,6 @@ if __name__ == "__main__":
         print(f"Unknown arguments: {unknown}")
 
     if (provider == "pluto"):
-        _pluto(notebook)
+        _pluto(notebook, deploy)
     else:
         print(f"Unknown provider: {provider}")
