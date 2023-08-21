@@ -21,6 +21,7 @@ def _pluto(notebook):
     code += ")"
     command.append(code)
     print(command)
+    _run(command)
 
 
 if __name__ == "__main__":
