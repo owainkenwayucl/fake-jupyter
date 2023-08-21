@@ -21,7 +21,7 @@ def _pluto(notebook):
     code += ")"
     command.append(code)
     print(command)
-    _run(command)
+    #_run(command)
 
 
 if __name__ == "__main__":
@@ -54,8 +54,13 @@ if __name__ == "__main__":
     notebook["allow_root"] = getattr(args, "ServerApp.allow_root")  
 
     config = configparser.ConfigParser()
-    config.read("fake-jupyter.ini")
-    provider = config["Configuration"]["provider"]
+    try:
+        config.read("fake-jupyter.ini")
+        provider = config["Configuration"]["provider"]
+    except:
+        print(f"Failed to read \"fake-jupyter.ini\"")
+        print(f"Defaulting to Pluto")
+        provider = "pluto"
 
     print(f"Selected provider: {provider}")
     print(f"Selected url: {notebook['ip']}:{notebook['port']}{notebook['base_url']}")
